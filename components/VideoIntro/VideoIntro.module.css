@@ -1,0 +1,431 @@
+.hero {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--color-void);
+  opacity: 0; /* revealed by GSAP on mount */
+}
+
+/* ==========================================================================
+   Layers — stacked back to front:
+   backdrop (blurred loop) -> foreground video -> gradient overlays ->
+   Three.js particles -> HUD frame -> content -> controls
+   ========================================================================== */
+
+.backdropLayer {
+  position: absolute;
+  inset: -6%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.backdropVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(38px) saturate(1.15) brightness(0.55);
+  transform: scale(1.1);
+}
+
+.videoLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.foregroundVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+/* Cinematic gradient overlays for legibility + mood */
+.gradientOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to top,
+      rgba(5, 6, 10, 0.96) 0%,
+      rgba(5, 6, 10, 0.55) 26%,
+      rgba(5, 6, 10, 0.15) 48%,
+      rgba(5, 6, 10, 0.35) 72%,
+      rgba(5, 6, 10, 0.85) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(5, 6, 10, 0.75) 0%,
+      rgba(5, 6, 10, 0.05) 38%,
+      rgba(5, 6, 10, 0.05) 62%,
+      rgba(5, 6, 10, 0.55) 100%
+    );
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    transparent 40%,
+    rgba(5, 6, 10, 0.55) 100%
+  );
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+}
+
+/* ==========================================================================
+   HUD frame — the signature element: a viewfinder-style corner frame with
+   a live timecode readout, tying the "cinematic" and "AI/technical" halves
+   of the brief together.
+   ========================================================================== */
+
+.hudFrame {
+  position: absolute;
+  inset: clamp(16px, 3vw, 36px);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.hudCorner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: rgba(245, 241, 232, 0.45);
+  border-style: solid;
+  border-width: 0;
+}
+.hudCorner--tl {
+  top: 0;
+  left: 0;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+.hudCorner--tr {
+  top: 0;
+  right: 0;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+.hudCorner--bl {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+.hudCorner--br {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+.hudTimecode {
+  position: absolute;
+  top: 0;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--color-mist);
+}
+
+.hudRecDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-ember);
+  box-shadow: 0 0 8px 1px rgba(255, 122, 61, 0.8);
+  animation: recPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes recPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* ==========================================================================
+   Content
+   ========================================================================== */
+
+.content {
+  position: relative;
+  z-index: 6;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 clamp(24px, 6vw, 88px) clamp(96px, 12vh, 160px);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--step-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  color: var(--color-ember-soft);
+  margin-bottom: clamp(18px, 3vh, 30px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--color-ember-soft);
+}
+
+.nameBlock {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.92;
+}
+
+.nameLine {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-style: normal;
+  font-size: var(--step-hero);
+  letter-spacing: -0.01em;
+  color: var(--color-paper);
+  text-shadow: 0 8px 60px rgba(255, 122, 61, 0.18);
+}
+
+.nameLine--accent {
+  font-style: italic;
+  font-weight: 300;
+  background: linear-gradient(
+    100deg,
+    var(--color-paper) 30%,
+    var(--color-ember-soft) 70%,
+    var(--color-monitor) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  margin-top: clamp(22px, 3.5vh, 34px);
+  max-width: 42ch;
+  font-family: var(--font-body);
+  font-size: var(--step-subtitle);
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--color-mist);
+}
+
+.subtitle strong {
+  color: var(--color-paper);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Controls — glassmorphism play/pause + mute buttons
+   ========================================================================== */
+
+.controls {
+  position: absolute;
+  z-index: 7;
+  right: clamp(20px, 4vw, 48px);
+  bottom: clamp(96px, 12vh, 160px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.controlButton {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 241, 232, 0.18);
+  background: rgba(11, 13, 18, 0.35);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-paper);
+  transition: border-color 0.35s var(--ease-cinematic),
+    background 0.35s var(--ease-cinematic), transform 0.35s var(--ease-cinematic);
+}
+
+.controlButton:hover {
+  border-color: rgba(255, 179, 122, 0.55);
+  background: rgba(255, 122, 61, 0.14);
+  transform: translateY(-2px);
+}
+
+.controlButton:focus-visible {
+  outline: 2px solid var(--color-ember-soft);
+  outline-offset: 3px;
+}
+
+.controlButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ==========================================================================
+   Tap-for-sound badge
+   ========================================================================== */
+
+.soundBadge {
+  position: absolute;
+  z-index: 7;
+  right: clamp(20px, 4vw, 48px);
+  bottom: calc(clamp(96px, 12vh, 160px) + 128px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 241, 232, 0.18);
+  background: rgba(11, 13, 18, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-mist);
+  cursor: pointer;
+}
+
+.soundBadge svg {
+  width: 13px;
+  height: 13px;
+  color: var(--color-ember-soft);
+}
+
+/* ==========================================================================
+   Scroll indicator
+   ========================================================================== */
+
+.scrollIndicator {
+  position: absolute;
+  z-index: 7;
+  left: 50%;
+  bottom: clamp(28px, 4vh, 40px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  padding: 8px;
+}
+
+.scrollLabel {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-mist-faint);
+  transition: color 0.3s ease;
+}
+
+.scrollIndicator:hover .scrollLabel {
+  color: var(--color-ember-soft);
+}
+
+.scrollLine {
+  position: relative;
+  width: 1px;
+  height: 44px;
+  background: rgba(245, 241, 232, 0.18);
+  overflow: hidden;
+}
+
+.scrollLine::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-ember-soft) 50%,
+    transparent
+  );
+  animation: scrollPulse 2.2s var(--ease-cinematic) infinite;
+}
+
+@keyframes scrollPulse {
+  0% {
+    top: -100%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 720px) {
+  .content {
+    padding: 0 20px 120px;
+  }
+
+  .controls {
+    bottom: 118px;
+    right: 16px;
+  }
+
+  .soundBadge {
+    right: 16px;
+    bottom: 250px;
+  }
+
+  .hudTimecode {
+    display: none;
+  }
+
+  .subtitle {
+    max-width: 34ch;
+  }
+}
+
+@media (max-height: 560px) {
+  .content {
+    padding-bottom: 72px;
+  }
+  .soundBadge {
+    display: none;
+  }
+}

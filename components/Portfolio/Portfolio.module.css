@@ -1,0 +1,362 @@
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 6vw, 88px);
+}
+
+.section {
+  position: relative;
+  padding: clamp(72px, 11vw, 128px) 0;
+  border-top: 1px solid rgba(245, 241, 232, 0.1);
+}
+
+.sectionContact {
+  composes: section;
+  border-bottom: 1px solid rgba(245, 241, 232, 0.1);
+}
+
+/* Scene tag — same mono/eyebrow/ember language as the hero's HUD, carried
+   forward as the numbered "reel" that ties the whole page together. */
+
+.sceneTag {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: clamp(20px, 3vw, 30px);
+  font-family: var(--font-mono);
+  font-size: var(--step-eyebrow);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-mist);
+}
+
+.sceneNumber {
+  color: var(--color-ember-soft);
+}
+
+.sceneRule {
+  flex: 1;
+  height: 1px;
+  background: rgba(245, 241, 232, 0.14);
+}
+
+.sectionTitle,
+.contactTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 4.2vw, 3.1rem);
+  line-height: 1.08;
+  color: var(--color-paper);
+  max-width: 16ch;
+  margin-bottom: clamp(24px, 4vw, 40px);
+}
+
+.contactTitle {
+  max-width: 14ch;
+}
+
+.accent {
+  font-style: italic;
+  font-weight: 300;
+  background: linear-gradient(100deg, var(--color-paper) 30%, var(--color-ember-soft) 70%, var(--color-monitor) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lede {
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--color-mist);
+  max-width: 62ch;
+  margin-bottom: clamp(40px, 6vw, 64px);
+}
+
+/* ---------------------------------------------------------------------
+   About / education
+   --------------------------------------------------------------------- */
+
+.eduGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(20px, 3vw, 32px);
+}
+
+.eduCard {
+  border: 1px solid rgba(245, 241, 232, 0.12);
+  background: linear-gradient(180deg, rgba(245, 241, 232, 0.035), transparent);
+  border-radius: 4px;
+  padding: clamp(22px, 3vw, 30px);
+  transition: border-color 0.4s var(--ease-cinematic), transform 0.4s var(--ease-cinematic);
+}
+
+.eduCard:hover {
+  border-color: rgba(255, 179, 122, 0.4);
+  transform: translateY(-2px);
+}
+
+.eduPeriod {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ember-soft);
+  margin-bottom: 14px;
+}
+
+.eduDegree {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--color-paper);
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+
+.eduSchool {
+  font-size: 0.92rem;
+  color: var(--color-mist);
+  margin-bottom: 14px;
+}
+
+.eduDetail {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--color-mist-faint);
+}
+
+/* ---------------------------------------------------------------------
+   Projects
+   --------------------------------------------------------------------- */
+
+.projectGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(20px, 3vw, 32px);
+}
+
+.projectCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(245, 241, 232, 0.12);
+  border-radius: 4px;
+  padding: clamp(24px, 3.2vw, 34px);
+  background: linear-gradient(180deg, rgba(255, 122, 61, 0.04), transparent 60%);
+  transition: border-color 0.4s var(--ease-cinematic), transform 0.4s var(--ease-cinematic);
+}
+
+.projectCard:hover {
+  border-color: rgba(255, 179, 122, 0.4);
+  transform: translateY(-3px);
+}
+
+.projectTake {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: var(--color-ember-soft);
+  margin-bottom: 12px;
+}
+
+.projectTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: var(--color-paper);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.projectDescription {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--color-mist);
+  margin-bottom: 20px;
+}
+
+.projectLink {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--color-paper);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(245, 241, 232, 0.3);
+  transition: color 0.3s var(--ease-cinematic), border-color 0.3s var(--ease-cinematic), gap 0.3s var(--ease-cinematic);
+}
+
+.projectLink:hover {
+  color: var(--color-ember-soft);
+  border-color: var(--color-ember-soft);
+  gap: 12px;
+}
+
+/* ---------------------------------------------------------------------
+   Skills
+   --------------------------------------------------------------------- */
+
+.skillGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(24px, 3.5vw, 40px) clamp(20px, 3vw, 32px);
+}
+
+.skillLabel {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-mist);
+  margin-bottom: 16px;
+}
+
+/* ---------------------------------------------------------------------
+   Shared tag / chip row
+   --------------------------------------------------------------------- */
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--color-mist);
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  border-radius: 999px;
+  padding: 7px 14px;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------
+   Strengths
+   --------------------------------------------------------------------- */
+
+.strengthGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(24px, 3vw, 36px) clamp(28px, 4vw, 48px);
+  margin-bottom: clamp(48px, 6vw, 72px);
+}
+
+.strengthTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-paper);
+  margin-bottom: 8px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.strengthTitle::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 10px;
+  height: 1px;
+  background: var(--color-ember-soft);
+}
+
+.strengthDetail {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--color-mist);
+  padding-left: 20px;
+}
+
+.interestsBlock {
+  padding-top: clamp(32px, 4vw, 44px);
+  border-top: 1px solid rgba(245, 241, 232, 0.1);
+}
+
+.interestsLabel {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-mist-faint);
+  margin-bottom: 16px;
+}
+
+/* ---------------------------------------------------------------------
+   Contact
+   --------------------------------------------------------------------- */
+
+.contactLinks {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(245, 241, 232, 0.12);
+  margin-bottom: clamp(32px, 4vw, 44px);
+}
+
+.contactLink {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(18px, 2.4vw, 24px) 4px;
+  border-bottom: 1px solid rgba(245, 241, 232, 0.12);
+  text-decoration: none;
+  color: var(--color-paper);
+  transition: padding-left 0.35s var(--ease-cinematic), color 0.35s var(--ease-cinematic);
+}
+
+.contactLink:hover {
+  padding-left: 14px;
+  color: var(--color-ember-soft);
+}
+
+.contactLinkLabel {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-mist-faint);
+}
+
+.contactLinkValue {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+}
+
+.footerNote {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--color-mist-faint);
+}
+
+/* ---------------------------------------------------------------------
+   Responsive
+   --------------------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  .eduGrid,
+  .projectGrid,
+  .skillGrid,
+  .strengthGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .contactLink {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
