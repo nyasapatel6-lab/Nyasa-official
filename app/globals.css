@@ -1,0 +1,70 @@
+/* ==========================================================================
+   Design tokens
+   ========================================================================== */
+:root {
+  /* Color — dark cinematic base, warm ember practical light, cool monitor glow */
+  --color-void: #05060a;
+  --color-ink: #0b0d12;
+  --color-ember: #ff7a3d;
+  --color-ember-soft: #ffb37a;
+  --color-monitor: #4f8cff;
+  --color-paper: #f5f1e8;
+  --color-mist: rgba(245, 241, 232, 0.62);
+  --color-mist-faint: rgba(245, 241, 232, 0.32);
+
+  /* Type scale — --font-display / --font-body / --font-mono are already
+     set (with correct fallbacks) by next/font via the className on <html>
+     in layout.jsx. Do NOT redefine them here: a custom property that
+     references itself (e.g. `--font-display: var(--font-display), ...`)
+     is invalid at computed-value time and silently breaks every rule
+     that uses it, falling back to the default system font. */
+
+  --step-hero: clamp(3.5rem, 13vw, 11rem);
+  --step-subtitle: clamp(1rem, 1.6vw, 1.35rem);
+  --step-eyebrow: clamp(0.68rem, 1vw, 0.8rem);
+
+  /* Motion */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-slow: 1.4s;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  background: var(--color-void);
+  color: var(--color-paper);
+  font-family: var(--font-body);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Next-section placeholder so the scroll indicator has somewhere to go */
+.next-section {
+  min-height: 100vh;
+  background: var(--color-ink);
+}
